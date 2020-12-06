@@ -1,4 +1,4 @@
-# QuickSwap
+# SpiritSwap
 
 Deploys token trading contracts on Matic Network.
 
