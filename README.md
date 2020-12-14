@@ -2,6 +2,22 @@
 
 Deploys token trading contracts on Matic Network.
 
+Installation
+
+`npm install -g node-gyp`  
+`yarn`
+
+If the build fails, delete `yarn.lock` and `node_modules/` and try again
+
+`rm yarn.lock && rm -rf node_modules`  
+`yarn`
+
+Run a Ganache development chain and Paste your secret key mnemonic into the file `.secret`
+
+Execute a developmnet environment:
+
+`truffle migrate --network development`
+
 Execute this to deploy:
 
 `truffle migrate --network matic`
