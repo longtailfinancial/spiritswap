@@ -10,7 +10,7 @@ import * as qssf from '../storage/QuickSwapStorage.sol';
 contract QuickSwapFactory is IQuickSwapFactory {   
 
     function mintQuickSwap(address tokenA, address tokenB, address _to, uint _value) external override {
-        require(qssf.quickSwapStorage().getPair[tokenA][tokenB] == msg.sender, 'QuickSwap: Not a pair');
+        require(qssf.quickSwapStorage().getPair[tokenA][tokenB] == msg.sender, 'SpiritSwap: Not a pair');
         util.mintGovernanceTokens(_to, _value); 
     }
 
@@ -36,10 +36,10 @@ contract QuickSwapFactory is IQuickSwapFactory {
 
     function createPair(address tokenA, address tokenB) external override returns (address pair) {
         qssf.QuickSwapStorage storage qss = qssf.quickSwapStorage();
-        require(tokenA != tokenB, 'QuickSwap: IDENTICAL_ADDRESSES');
+        require(tokenA != tokenB, 'SpiritSwap: IDENTICAL_ADDRESSES');
         (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
-        require(token0 != address(0), 'QuickSwap: ZERO_ADDRESS');
-        require(qss.getPair[token0][token1] == address(0), 'QuickSwap: PAIR_EXISTS'); // single check is sufficient
+        require(token0 != address(0), 'SpiritSwap: ZERO_ADDRESS');
+        require(qss.getPair[token0][token1] == address(0), 'SpiritSwap: PAIR_EXISTS'); // single check is sufficient
         bytes memory bytecode = type(QuickSwapPair).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(token0, token1));
         assembly {
@@ -54,13 +54,13 @@ contract QuickSwapFactory is IQuickSwapFactory {
 
     function setFeeTo(address _feeTo) external override {
         qssf.QuickSwapStorage storage qss = qssf.quickSwapStorage();
-        require(msg.sender == qss.feeToSetter, 'QuickSwap: FORBIDDEN');
+        require(msg.sender == qss.feeToSetter, 'SpiritSwap: FORBIDDEN');
         qss.feeTo = _feeTo;
     }
 
     function setFeeToSetter(address _feeToSetter) external override {
         qssf.QuickSwapStorage storage qss = qssf.quickSwapStorage();
-        require(msg.sender == qss.feeToSetter, 'QuickSwap: FORBIDDEN');
+        require(msg.sender == qss.feeToSetter, 'SpiritSwap: FORBIDDEN');
         qss.feeToSetter = _feeToSetter;
     }
 }
