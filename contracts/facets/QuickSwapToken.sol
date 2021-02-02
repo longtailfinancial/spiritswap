@@ -4,7 +4,6 @@ pragma solidity >=0.7.1;
 import { IERC20 } from '../interfaces/IERC20.sol';
 import * as util from '../libraries/Util.sol';
 import * as gsf from '../storage/GovernanceStorage.sol';
-import './libraries/SafeMath.sol';
 
 
 contract QuickSwapToken is IERC20 {
@@ -52,6 +51,12 @@ contract QuickSwapToken is IERC20 {
     function add96(uint96 a, uint96 b, string memory errorMessage) internal pure returns (uint96) {
        uint96 c = a + b;
        require(c >= a, errorMessage);
+       return c;
+    }
+    
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+       uint256 c = a + b;
+       require(c >= a, "SafeMath: addition overflow");
        return c;
     }
     
