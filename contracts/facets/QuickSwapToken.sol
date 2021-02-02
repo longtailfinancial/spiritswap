@@ -8,8 +8,6 @@ import * as gsf from '../storage/GovernanceStorage.sol';
 
 contract QuickSwapToken is IERC20 {
 
-    using SafeMath for uint;
-
     function name() public pure override returns (string memory) { return 'SpiritCoin'; }
 
     function symbol() public pure override returns (string memory) { return 'SPIRIT'; }
