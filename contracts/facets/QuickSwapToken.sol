@@ -68,7 +68,7 @@ contract QuickSwapToken is IERC20 {
        gs.totalSupply = safe96(add(gs.totalSupply, amount), "Spirit::mint: totalSupply exceeds 96 bits");
 
        // transfer the amount to the recipient
-       gs.balances[_to] = add(gs.balances[_to], amount, "Spirit::mint: transfer amount overflows");
+       gs.balances[_to] = add(gs.balances[_to], amount);
        emit Transfer(address(0), _to, amount);
 
     }
