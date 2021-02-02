@@ -60,6 +60,39 @@ contract QuickSwapToken is IERC20 {
         }
     }
 
+
+    function safe96(uint n, string memory errorMessage) internal pure returns (uint96) {	
+       require(n < 2**96, errorMessage);	
+       return uint96(n);	
+    }	
+
+    function add96(uint96 a, uint96 b, string memory errorMessage) internal pure returns (uint96) {	
+       uint96 c = a + b;	
+       require(c >= a, errorMessage);	
+       return c;	
+    }	
+
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {	
+       uint256 c = a + b;	
+       require(c >= a, "SafeMath: addition overflow");	
+       return c;	
+    }	
+
+    function _mint(address _to, uint rawAmount) internal {	
+       gsf.GovernanceStorage storage gs = gsf.governanceStorage();	
+
+       require(_to != address(0), "Spirit::mint: cannot transfer to the zero address");	
+
+       // mint the amount	
+       uint96 amount = safe96(rawAmount, "Spirit::mint: amount exceeds 96 bits");	
+       gs.totalSupply = safe96(add(gs.totalSupply, amount), "Spirit::mint: totalSupply exceeds 96 bits");	
+
+       // transfer the amount to the recipient	
+       gs.balances[_to] = add(gs.balances[_to], amount);	
+       emit Transfer(address(0), _to, amount);	
+
+    }
+
     function approve(address _spender, uint _value) external override returns (bool success) {
         gsf.GovernanceStorage storage gs = gsf.governanceStorage();
         gs.approved[msg.sender][_spender] = _value;
