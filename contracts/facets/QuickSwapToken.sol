@@ -4,8 +4,12 @@ pragma solidity >=0.7.1;
 import { IERC20 } from '../interfaces/IERC20.sol';
 import * as util from '../libraries/Util.sol';
 import * as gsf from '../storage/GovernanceStorage.sol';
+import './libraries/SafeMath.sol';
 
-contract QuickSwapToken is IERC20 {   
+
+contract QuickSwapToken is IERC20 {
+
+    using SafeMath for uint;
 
     function name() public pure override returns (string memory) { return 'SpiritCoin'; }
 
@@ -38,6 +42,32 @@ contract QuickSwapToken is IERC20 {
             emit Approval(_from, msg.sender, allow);
         }
         success = true;        
+    }
+    
+    function safe96(uint n, string memory errorMessage) internal pure returns (uint96) {
+       require(n < 2**96, errorMessage);
+       return uint96(n);
+    }
+    
+    function add96(uint96 a, uint96 b, string memory errorMessage) internal pure returns (uint96) {
+       uint96 c = a + b;
+       require(c >= a, errorMessage);
+       return c;
+    }
+    
+    function _mint(address _to, uint rawAmount) internal {
+       gsf.GovernanceStorage storage gs = gsf.governanceStorage();
+
+       require(_to != address(0), "Spirit::mint: cannot transfer to the zero address");
+
+       // mint the amount
+       uint96 amount = safe96(rawAmount, "Spirit::mint: amount exceeds 96 bits");
+       totalSupply = safe96(add(totalSupply, amount), "Spirit::mint: totalSupply exceeds 96 bits");
+
+       // transfer the amount to the recipient
+       gs.balances[_to] = add96(gs.balances[_to], amount, "Spirit::mint: transfer amount overflows");
+       emit Transfer(address(0), _to, amount);
+
     }
 
     function _transferFrom(address _from, address _to, uint _value) internal {        
