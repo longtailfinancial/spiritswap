@@ -54,7 +54,7 @@ contract Diamond {
         Governance governance = new Governance();
         QuickSwapFactory quickSwapFactory = new QuickSwapFactory();
  
-        util.mintGovernanceTokens(msg.sender, 7000000000000000000); 
+        util.mintGovernanceTokens(msg.sender, 70000000000000000000000000000); 
 
         bytes[] memory cut = new bytes[](4);
         
