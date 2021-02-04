@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 import * as gsf from '../storage/GovernanceStorage.sol';
 
 
-function mintGovernanceTokens(address _to, uint _value) {
+function mintGovernanceTokens(address _to, uint256 _value) {
     gsf.GovernanceStorage storage gs = gsf.governanceStorage();
     uint totalSupply = gs.totalSupply;
     uint totalSupplyCap = gs.totalSupplyCap;
