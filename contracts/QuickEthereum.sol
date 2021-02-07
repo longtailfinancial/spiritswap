@@ -188,22 +188,21 @@ library SafeMath {
 
 contract QuickToken {
     /// @notice EIP-20 token name for this token
-    string public constant name = "Quickswap";
+    string public constant name = "Spiritcoin";
 
     /// @notice EIP-20 token symbol for this token
-    string public constant symbol = "QUICK";
+    string public constant symbol = "SPIRIT";
 
     /// @notice EIP-20 token decimals for this token
-    uint8 public constant decimals = 18;
+    uint8 public constant decimals = 2;
 
     /// @notice Total number of tokens in circulation
-    uint public totalSupply = 10000000000000000000000000; // 1 million QUICK
+    uint public totalSupply = 2000000000000; // 10 billion spirit
 
     /// @notice Address which may mint new tokens
     address public minter;
 
     /// @notice The timestamp after which minting may occur
-    uint public mintingAllowedAfter;
 
     /// @notice Minimum time between mints
     uint32 public constant minimumTimeBetweenMints = 1 days * 365;
@@ -231,16 +230,13 @@ contract QuickToken {
      * @notice Construct a new Quick token
      * @param account The initial account to grant all the tokens
      * @param minter_ The account with minting ability
-     * @param mintingAllowedAfter_ The timestamp after which minting may occur
      */
-    constructor(address account, address minter_, uint mintingAllowedAfter_) public {
-        require(mintingAllowedAfter_ >= block.timestamp, "Quick::constructor: minting can only begin after deployment");
-
+    constructor(address account, address minter_) public {
+        
         balances[account] = uint96(totalSupply);
         emit Transfer(address(0), account, totalSupply);
         minter = minter_;
         emit MinterChanged(address(0), minter);
-        mintingAllowedAfter = mintingAllowedAfter_;
     }
 
     /**
@@ -260,12 +256,9 @@ contract QuickToken {
      */
     function mint(address dst, uint rawAmount) external {
         require(msg.sender == minter, "Quick::mint: only the minter can mint");
-        require(block.timestamp >= mintingAllowedAfter, "Quick::mint: minting not allowed yet");
         require(dst != address(0), "Quick::mint: cannot transfer to the zero address");
 
-        // record the mint
-        mintingAllowedAfter = SafeMath.add(block.timestamp, minimumTimeBetweenMints);
-
+        
         // mint the amount
         uint96 amount = safe96(rawAmount, "Quick::mint: amount exceeds 96 bits");
         require(amount <= SafeMath.div(SafeMath.mul(totalSupply, mintCap), 100), "Quick::mint: exceeded mint cap");
